@@ -18,8 +18,13 @@ class AppController {
 
   //define as rotas da nossa Api
   routes() {
+    //Define as rotas da nossa API
+    const apiRoutes = require('./routes/apiRoutes');
+    this.express.use('/agendamento-sala-senai/api/v1/',apiRoutes);
+
+
     //Define uma rota GET para o caminho health
-    this.express.get("/health/", (req, res) => {
+    this.express.get("/agendamento-sala-senai/api/health/", (req, res) => {
       res.send({status:"OK!"});
     });//Essa rota é usada para verificar se a Api esta OK
   }
