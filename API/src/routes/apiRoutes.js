@@ -3,12 +3,15 @@
 const router = require('express').Router();
 
 // Importa a controller onde contém a lógica relacionada a professores
-const controleNumber = require('../controllers/NumberController');
+const { route } = require('..');
+const userController = require("../controllers/userController")
 
 
-// Rota POST para '/teacher'
-router.post('/NumeroPar/',controleNumber.postPar);
-router.post('/NumeroPrimo/',controleNumber.postPrimo);
-router.get('/teacher/', controleNumber.getNumbers);
+router.post('/user', userController.createUser);
+//router.post('user/login', userController.postLogin);
+router.get('/user', userController.getAllUsers);
+//router.get('/user/:cpf', userController.gerUserById); 
+router.put('/user', userController.updateUser);
+router.delete('/user/:id', userController.deleteUser);
 
 module.exports = router

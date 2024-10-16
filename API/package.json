@@ -1,13 +1,13 @@
 {
   "name": "api_url_base",
   "version": "2.0.0",
-  "description": "minha api",
+  "description": "Api de relação ao site de reservas de sala do Senai",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start":"node src/server.js"
   },
-  "author": "Maria Clara Mendes",
+  "author": "Miguel,Pedro,Maria",
   "license": "ISC",
   "dependencies": {
     "axios": "^1.7.4",
