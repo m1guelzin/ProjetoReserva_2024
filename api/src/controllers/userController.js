@@ -149,8 +149,8 @@ static async updateUser(req, res) {
     return res.status(400).json({ error: "Todos os campos devem ser preenchidos" });
   }
 
-  const queryUpdate = `UPDATE usuario SET cpf=?, nome=?, telefone=?, email=?, senha=? WHERE cpf = ?`;
-  const values = [cpf, nome, telefone, email, senha, cpf];
+  const queryUpdate = `UPDATE usuario SET nome=?, telefone=?, email=?, senha=? WHERE cpf = ?`;
+  const values = [nome, telefone, email, senha, cpf];
 
   try {
     connect.query(queryUpdate, values, function (err, results) {
