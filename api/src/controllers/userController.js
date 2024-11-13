@@ -1,4 +1,5 @@
 const connect = require("../db/connect");
+
 module.exports = class userController {
   static async createUser(req, res) {
     const { cpf, nome, telefone, email, senha } = req.body;
