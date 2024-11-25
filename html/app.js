@@ -105,4 +105,36 @@ document
       console.error("Erro:", error.message);
     });
 });
+
+//a
+function getAllSalas() {
+  fetch("http://10.89.240.3:5000/api/v1/user/", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/JSON",
+    },
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      return response.json().then((err) => {
+        throw new Error(err.error);
+      });
+    })
+    .then((data) => {
+      const userList = document.getElementById("user-list");
+      userList.innerHTML = " "; // limpa a lista existente
+      data.users.forEach((user) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = `Nome: ${user.name}, CPF: ${user.cpf}, Email: ${user.email}`;
+        userList.appendChild(listItem);
+      });
+    })
+    .catch((error) => {
+      alert("Erro ao obter Usuários" + error.message);
+      console.error("Erro ", error.message);
+    });
+}
+
 })

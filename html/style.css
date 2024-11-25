@@ -516,6 +516,7 @@ html, body {
     border: none;
     cursor: pointer;
     border-radius: 5px;
+    justify-content: center;
 }
 
 .dropdown-btn:hover {
