@@ -19,11 +19,11 @@
     <!-- Conteúdo principal da página -->
     <main class="main-perfil">
       <section class="perfil-container">
-        <div class=>
-        <h2>PERFIL DE USUÁRIO</h2>
-      </div>
+        <div>
+          <h2>PERFIL DE USUÁRIO</h2>
+        </div>
 
-        <form class="perfil-form">
+        <form id="perfil-form">
           <label for="nome"></label>
           <input type="text" id="nome" name="nome" placeholder="Nome Completo do Usuário" />
 
@@ -39,9 +39,9 @@
           <label for="reservas"></label>
           <select id="reservas" name="reservas">
             <option value="" disabled selected>Minhas Reservas</option>
-            <!-- Adicionar as opções de reservas -->
           </select>
         </form>
+        <button id="botao-deletar-conta" class="btn-danger">Deletar Conta</button>
       </section>
     </main>
 
@@ -49,5 +49,6 @@
     <footer>
       <p>SENAI Franca-SP</p>
     </footer>
+    <script src="appPerfil.js"></script>
   </body>
 </html>
