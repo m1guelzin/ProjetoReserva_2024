@@ -135,53 +135,74 @@ module.exports = class reservaController {
 
 
 
-  static async getReservas(req, res) {
-    const querySelect = `
-      SELECT r.id_reserva, r.fkid_usuario, r.fkid_salas, r.data_hora, r.duracao, u.nome AS usuario_nome, s.nome_da_sala AS sala_nome
-      FROM reservas r
-      INNER JOIN usuario u ON r.fkid_usuario = u.id_usuario
-      INNER JOIN salas s ON r.fkid_salas = s.id_salas
-    `;
-  
-    try {
-      connect.query(querySelect, (err, results) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).json({ error: "Erro ao buscar reservas" });
+static async getReservas(req, res) {
+  const querySelect = `
+    SELECT r.id_reserva, r.fkid_usuario, r.fkid_salas, r.data_hora, r.duracao, u.nome AS usuario_nome, s.nome_da_sala AS sala_nome
+    FROM reservas r
+    INNER JOIN usuario u ON r.fkid_usuario = u.id_usuario
+    INNER JOIN salas s ON r.fkid_salas = s.id_salas
+  `;
+
+  try {
+    connect.query(querySelect, (err, results) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Erro ao buscar reservas" });
+      }
+
+      // Ajustar o horário para o fuso horário do Brasil (UTC-3)
+      const reservasFormatadas = results.map(reserva => {
+        if (reserva.data_hora instanceof Date) {
+          // Ajustar a data/hora subtraindo 3 horas
+          const dataHoraAjustada = new Date(reserva.data_hora);
+          dataHoraAjustada.setHours(dataHoraAjustada.getHours() - 3);
+          
+          // Converter para string no formato desejado
+          reserva.data_hora = dataHoraAjustada.toISOString().replace("T", " ").split(".")[0];
         }
-  
-        // Formatar a data para remover o "T", se for um objeto Date
-        const reservasFormatadas = results.map(reserva => {
-          if (reserva.data_hora instanceof Date) {
-            // Se for um objeto Date, converte para string no formato desejado
-            reserva.data_hora = reserva.data_hora.toISOString().replace("T", " ").split(".")[0];
-          }
-          return reserva;
-        });
-  
-        return res
-          .status(200)
-          .json({ message: "Lista de Reservas", reservas: reservasFormatadas });
+        return reserva;
       });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: "Erro interno do servidor" });
-    }
+
+      return res
+        .status(200)
+        .json({ message: "Lista de Reservas", reservas: reservasFormatadas });
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Erro interno do servidor" });
   }
+}
   
 
-  static async getReservasByUser(req, res) {
-    const { id_usuario } = req.params;
+static async getReservasByUser(req, res) {
+  const { id_usuario } = req.params;
 
-    const querySelect = `
-      SELECT r.id_reserva, r.fkid_usuario, r.fkid_salas, r.data_hora, r.duracao, s.nome_da_sala AS sala_nome
-      FROM reservas r
-      INNER JOIN salas s ON r.fkid_salas = s.id_salas
-      WHERE r.fkid_usuario = ?
-    `;
-    const valuesSelect = [id_usuario];
+  // Query para verificar a existência do usuário
+  const queryCheckUser = `SELECT id_usuario FROM usuario WHERE id_usuario = ?`;
+  const valuesCheckUser = [id_usuario];
 
-    try {
+  // Query para buscar reservas do usuário
+  const querySelect = `
+    SELECT r.id_reserva, s.nome_da_sala, r.data_hora, r.duracao
+    FROM reservas r
+    INNER JOIN salas s ON r.fkid_salas = s.id_salas
+    WHERE r.fkid_usuario = ?
+  `;
+  const valuesSelect = [id_usuario];
+
+  try {
+    // Verificar se o usuário existe
+    connect.query(queryCheckUser, valuesCheckUser, (err, userResults) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Erro ao verificar existência do usuário" });
+      }
+
+      if (userResults.length === 0) {
+        return res.status(404).json({ message: "Usuário não encontrado" });
+      }
+
+      // Buscar reservas do usuário
       connect.query(querySelect, valuesSelect, (err, results) => {
         if (err) {
           console.error(err);
@@ -190,15 +211,36 @@ module.exports = class reservaController {
             .json({ error: "Erro ao buscar reservas do usuário" });
         }
 
+        // Verificar se o usuário possui reservas
+        if (results.length === 0) {
+          return res.status(404).json({ message: "Nenhuma reserva encontrada para este usuário" });
+        }
+
+        // Formatar data/hora diretamente
+        const reservasFormatadas = results.map(reserva => {
+          if (reserva.data_hora) {
+            // Ajustar o horário para UTC-3 e formatar
+            const dataHora = new Date(reserva.data_hora);
+            dataHora.setHours(dataHora.getHours() - 3);
+            reserva.data_hora = dataHora
+              .toISOString()
+              .replace("T", " ")
+              .split(".")[0]; // Remover milissegundos
+          }
+          return reserva;
+        });
+
         return res
           .status(200)
-          .json({ message: "Reservas do usuário", reservas: results });
+          .json({ message: "Reservas do usuário", reservas: reservasFormatadas });
       });
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ error: "Erro interno do servidor" });
-    }
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Erro interno do servidor" });
   }
+}
+
 
   static async updateReserva(req, res) {
     const { id_reserva, fkid_salas, data_hora, duracao } = req.body;
