@@ -24,13 +24,14 @@ O projeto conta com uma interface em **HTML/CSS** e uma **API em JavaScript** pa
    start home.html
 Isso abrirá o projeto no navegador.
 
-Backend (API)
+### Backend (API)
 Abra a pasta api.
 
 Cole o script do banco de dados no Shell do Mysql
 
-Dentro do diretório raiz da `api`
-rode no `powershell` o comando `npm i`
+Dentro do diretório raiz da 'api'
+rode no 'powershell' o comando `npm i`
+
 -para baixar as dependências
 
 atualize as variáveis de ambiente do connect.js
