@@ -1,0 +1,34 @@
+-- Criar banco de dados
+CREATE DATABASE IF NOT EXISTS senai_reservas;
+USE senai_reservas;
+
+-- Tabela de usuários
+CREATE TABLE IF NOT EXISTS usuario (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    cpf VARCHAR(11) NOT NULL UNIQUE,
+    nome VARCHAR(100) NOT NULL,
+    telefone VARCHAR(20) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL
+);
+
+-- Tabela de salas
+CREATE TABLE IF NOT EXISTS salas (
+    id_salas INT AUTO_INCREMENT PRIMARY KEY,
+    nome_da_sala VARCHAR(100) NOT NULL UNIQUE,
+    capacidade INT NOT NULL,
+    localizacao VARCHAR(100) NOT NULL,
+    disponibilidade TINYINT(1) NOT NULL DEFAULT 1, -- 1 = disponível, 0 = indisponível
+    equipamentos VARCHAR(255) NOT NULL
+);
+
+-- Tabela de reservas
+CREATE TABLE IF NOT EXISTS reservas (
+    id_reserva INT AUTO_INCREMENT PRIMARY KEY,
+    fkid_usuario INT NOT NULL,
+    fkid_salas INT NOT NULL,
+    data_hora DATETIME NOT NULL,
+    duracao TIME NOT NULL,
+    FOREIGN KEY (fkid_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE,
+    FOREIGN KEY (fkid_salas) REFERENCES salas(id_salas) ON DELETE CASCADE
+);
