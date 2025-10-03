@@ -52,5 +52,7 @@ JavaScript (Frontend e Backend)
 
 #Contato
 -Miguel Garrido Souza
+
 miguelgarridodev@gmail.com
+
 www.linkedin.com/in/miguel-garrido-dev
