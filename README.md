@@ -19,24 +19,24 @@ O projeto conta com uma interface em **HTML/CSS** e uma **API em JavaScript** pa
 ### Frontend
 
 1. Abra a pasta `html`.
-2. Dê um duplo clique no arquivo `home.html` **ou** execute:
+2. Dê um duplo clique no arquivo `home.html` **ou** execute no powershell:
    ```bash
    start home.html
 Isso abrirá o projeto no navegador.
 
 ### Backend (API)
-Abra a pasta api.
+1. Abra a pasta api.
 
 Cole o script do banco de dados no Shell do Mysql
 
-Dentro do diretório raiz da 'api'
+2. Dentro do diretório raiz da 'api'
 rode no 'powershell' o comando `npm i`
 
 -para baixar as dependências
 
-atualize as variáveis de ambiente do connect.js
+3. Atualize as variáveis de ambiente do connect.js
 
-rode `npm start` para inciar a Api
+4. rode `npm start` para inciar a Api
 
 Observações
 Este projeto é básico e pode ser expandido com banco de dados, autenticação e melhorias na interface.
